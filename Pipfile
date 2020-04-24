@@ -5,6 +5,6 @@ name = "pypi"
 
 [packages]
 flask = "*"
-SQLAlchemy = "*"
+pyodbc = "*"
 flask_restful =  "*"
 json = "*"

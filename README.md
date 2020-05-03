@@ -13,7 +13,7 @@ system.
 ## Running the API
 
 Regardless of operating system, the steps to run the API locally are the 
-following (you have to be at the directory root):
+following (you have to be at the directory's root):
 
 * Create the pipenv environment
 

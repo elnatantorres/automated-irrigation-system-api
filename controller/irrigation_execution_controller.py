@@ -42,3 +42,35 @@ class IrrigationExecutionController(MethodView):
             cursor.commit()
         except Exception as ex:
             print(ex)
+
+    def get(self):
+        username = request.headers['Username']
+        password = request.headers['Password']
+
+        try:
+            user_authentication = AuthenticationService.authenticate(self, username, password)
+
+            if(user_authentication.isUserAuthenticated == False):
+                return jsonify('User not authenticated')
+
+            database_connection = DatabaseConnection()
+            connection = database_connection.connectToDatabase() 
+
+            cursor =  connection.cursor()
+
+            cursor.execute("SELECT * FROM dbo.IrrigationExecution")
+
+            query_result = []
+            rows = cursor.fetchall()
+            for row in rows:
+                query_result.append((row.Id, row.IrrigationSystemId, str(row.InitialExecutionDateTime), 
+                str(row.FinalExecutionDateTime), row.UserId))
+
+            print(query_result)
+
+            return {'results':
+                [dict(zip([column[0] for column in cursor.description], row))
+                for row in query_result]}
+
+        except Exception as ex:
+            print(ex)

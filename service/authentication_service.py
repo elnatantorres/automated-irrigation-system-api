@@ -1,15 +1,11 @@
 import pyodbc
+from helper.database_connection import DatabaseConnection
 
 class AuthenticationService():
     def authenticate(self, username, password):
         try:
-            connection = pyodbc.connect(
-                Driver='{ODBC Driver 17 for SQL Server}',
-                Server='BRSAOWN023741',
-                Database='AutomatedIrrigationSystem',
-                ApplicationIntent='ReadWrite',
-                UseFMTOnly='yes',
-                Trusted_Connection='yes')
+            database_connection = DatabaseConnection()
+            connection = database_connection.connectToDatabase() 
 
             cursor =  connection.cursor()
             cursor.execute("""SELECT

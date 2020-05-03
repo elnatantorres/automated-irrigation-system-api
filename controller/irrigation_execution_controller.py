@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 from flask.views import MethodView
 import pyodbc
-from json import dumps
 from datetime import datetime
 from service.authentication_service import AuthenticationService
+from helper.database_connection import DatabaseConnection
 
 class IrrigationExecutionController(MethodView):
     def post(self):
@@ -15,16 +15,10 @@ class IrrigationExecutionController(MethodView):
             user_authentication = AuthenticationService.authenticate(self, username, password)
 
             if(user_authentication.isUserAuthenticated == False):
-                print('BBB')
                 return jsonify('User not authenticated')
 
-            connection = pyodbc.connect(
-                Driver='{ODBC Driver 17 for SQL Server}',
-                Server='BRSAOWN023741',
-                Database='AutomatedIrrigationSystem',
-                ApplicationIntent='ReadWrite',
-                UseFMTOnly='yes',
-                Trusted_Connection='yes')
+            database_connection = DatabaseConnection()
+            connection = database_connection.connectToDatabase() 
 
             initial_execution_datetime = datetime.now()
 

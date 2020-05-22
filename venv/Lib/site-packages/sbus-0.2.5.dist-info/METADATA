@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: sbus
+Version: 0.2.5
+Summary: Pub/sub abstraction for aioamqp
+Home-page: https://github.com/dyuuus/sbus
+Author: Andrey Zdanchuk
+Author-email: dyuuus@gmail.com
+License: BSD License
+Platform: UNKNOWN
+Requires-Dist: aio-pika (==4.0.0)
+Requires-Dist: pydantic (==0.12.1)
+
+UNKNOWN
+
+

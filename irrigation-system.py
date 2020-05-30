@@ -1,47 +1,35 @@
-from pyfirmata import Arduino, util
 import time
+from pyfirmata import Arduino, util
 
-board = Arduino('COM13')  # Define a porta onde esta o arduino
-it = util.Iterator(board)  # Controla as leituras das portas do arduino
+Board = Arduino('COM4')  # Define a porta onde esta o arduino
+it = util.Iterator(Board)  # Controla as leituras das portas do arduino
 it.start()
 
+# Define pino do rele como OUTPUT
+pino_rele = Board.get_pin('d:10:o')
+
+Board.digital[10].write(1)  # Rele inicia desligado
+
 # Define porta analogica -> sensor
-pino_analogico = board.get_pin('a:0:i')
+valor_analog = Board.get_pin('a:0:i')
 
-# Defino pinos do 10 ao 13 como OUTPUT
-pino10 = board.get_pin('d:10:o')
-pino11 = board.get_pin('d:11:o')
-pino12 = board.get_pin('d:12:o')
-pino13 = board.get_pin('d:13:o')
+time.sleep(0.5)
 
-# Desliga pinos 10 ao 13, write(0) => LOW
-desliga_pino11 = board.digital[10].write(0)
-desliga_pino12 = board.digital[11].write(0)
-desliga_pino13 = board.digital[12].write(0)
-desliga_pino14 = board.digital[13].write(0)
-
-# Define pinos do rele como OUTPUT
-pino_rele = board.get_pin('d:4:o')
-pino_rele2 = board.get_pin('d:3:o')
-
-# Reles iniciam desligados
-board.digital[4].write(1)
-board.digital[3].write(1)
-
-time.sleep(2)
 while True:
-    valor_analogico = pino_analogico.read()  # Valor que o sensor leu
+    valor_analogico = valor_analog.read()  # Valor que o sensor leu
 
-    if 0 <= valor_analogico <= 340:  # Caso solo esteja umido
-        print("STATUS: Solo umido")
+    if 0 < valor_analogico < 0.5:  # Caso solo esteja umido
+        print("STATUS: Solo umido - {} \n".format(valor_analogico))
 
-    elif 681 >= valor_analogico >= 341:  # Caso solo esteja normal
-        print("STATUS: Solo moderado")
+    elif 0.5 < valor_analogico < 0.8:  # Caso solo esteja normal
+        print("STATUS: Solo moderado - {} \n".format(valor_analogico))
 
-    elif 1023 >= valor_analogico >= 682:  # Caso o solo esteja seco
-        print("STATUS: Solo seco")
-        board.digital[3].write(0)
+    elif 0.8 < valor_analogico <= 1:  # Caso o solo esteja seco
+        print(" \nSTATUS: Solo seco - {}\n".format(valor_analogico))
+        Board.digital[10].write(0)
+        print("REGANDO...")
         time.sleep(2)  # Mantem aberta por 2 segundos
-        board.digital[3].write(1)  # desliga o rele
+        Board.digital[10].write(1)  # desliga o rele
+        print("PLANTAS REGADAS COM SUCESSO!!!")
 
-    time.sleep(3)  # Delay de 3 seg, depois o loop se repete
+    time.sleep(60)  # Delay de 3 seg, depois o loop se repete

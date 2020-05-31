@@ -4,7 +4,7 @@ class DatabaseConnection():
     def connectToDatabase(self):
         connection = pyodbc.connect(
             Driver='{ODBC Driver 17 for SQL Server}',
-            Server='BRSAOWN023741',
+            Server='DESKTOP-P2FHOP0\SQLEXPRESS',
             Database='AutomatedIrrigationSystem',
             ApplicationIntent='ReadWrite',
             UseFMTOnly='yes',

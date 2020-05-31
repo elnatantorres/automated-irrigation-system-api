@@ -4,6 +4,7 @@ import pyodbc
 from datetime import datetime
 from service.authentication_service import AuthenticationService
 from helper.database_connection import DatabaseConnection
+from controller_arduino.controller_sensor import excution_irrigation
 
 class IrrigationExecutionController(MethodView):
     def post(self):
@@ -31,7 +32,10 @@ class IrrigationExecutionController(MethodView):
             cursor.commit()
 
             ## THE CALL TO ARDUINO GOES HERE
-
+            try:
+                excution_irrigation()
+            except Exception as e:
+                print(e)
             final_execution_datetime = datetime.now()
 
             cursor = connection.cursor()
